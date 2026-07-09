@@ -3,8 +3,16 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Terminal, Cpu, CheckCircle2, ShieldCheck, Sparkles, ArrowLeft } from "lucide-react";
+import {
+  Terminal,
+  Cpu,
+  CheckCircle2,
+  ShieldCheck,
+  Sparkles,
+  ArrowLeft,
+} from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
+import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -19,11 +27,26 @@ export default function LoginPage() {
   }, []);
 
   const timelineSteps = [
-    { text: "⚠️ Sentry Alert received: TypeError: auth.user is undefined", type: "error" },
-    { text: "🔍 Relay Agent analyzing repository git-diff in sandbox...", type: "info" },
-    { text: "🛠️ Generated bugfix patch for controllers/auth.ts line 28", type: "success" },
-    { text: "🚀 Patch verified against test suite & Pull Request #412 opened", type: "success" },
-    { text: "✅ Slack dispatch sent. Incident mitigated in 4.8s.", type: "success" },
+    {
+      text: "⚠️ Sentry Alert received: TypeError: auth.user is undefined",
+      type: "error",
+    },
+    {
+      text: "🔍 Relay Agent analyzing repository git-diff in sandbox...",
+      type: "info",
+    },
+    {
+      text: "🛠️ Generated bugfix patch for controllers/auth.ts line 28",
+      type: "success",
+    },
+    {
+      text: "🚀 Patch verified against test suite & Pull Request #412 opened",
+      type: "success",
+    },
+    {
+      text: "✅ Slack dispatch sent. Incident mitigated in 4.8s.",
+      type: "success",
+    },
   ];
 
   const handleEmailSubmit = (e: React.FormEvent) => {
@@ -31,12 +54,17 @@ export default function LoginPage() {
     alert(`Signing in with ${email}... (Mock auth flow)`);
   };
 
+  const handleSignIn = async (provider: string) => {
+    await authClient.signIn.social({
+      provider: provider,
+      callbackURL: "/dashboard",
+    });
+  };
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-zinc-950 text-zinc-50 font-sans selection:bg-indigo-500/30">
-      
       {/* LEFT COLUMN: Authentication Form */}
       <div className="flex flex-col justify-between p-8 sm:p-12 md:p-16 lg:p-20 xl:p-24 relative overflow-hidden">
-        
         {/* Subtle grid and glow for mobile layout */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,oklch(1_0_0_/_2%)_1px,transparent_1px),linear-gradient(to_bottom,oklch(1_0_0_/_2%)_1px,transparent_1px)] bg-[size:4rem_4rem] lg:hidden pointer-events-none" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-indigo-500/5 blur-[100px] rounded-full lg:hidden pointer-events-none" />
@@ -52,7 +80,7 @@ export default function LoginPage() {
             </div>
             <span className="font-bold text-xl tracking-tight">Relay</span>
           </Link>
-          
+
           <Link
             href="/"
             className="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-300 font-mono transition-colors"
@@ -78,6 +106,7 @@ export default function LoginPage() {
             <Button
               variant="outline"
               className="w-full h-11 bg-zinc-900 border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700 hover:text-zinc-100 text-zinc-300 transition-all font-medium cursor-pointer rounded-xl flex items-center justify-center gap-2"
+              onClick={() => handleSignIn("github")}
             >
               <SiGithub className="h-5 w-5" />
               <span>Continue with GitHub</span>
@@ -86,6 +115,7 @@ export default function LoginPage() {
             <Button
               variant="outline"
               className="w-full h-11 bg-zinc-900 border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700 hover:text-zinc-100 text-zinc-300 transition-all font-medium cursor-pointer rounded-xl flex items-center justify-center gap-2"
+              onClick={() => handleSignIn("google")}
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
                 <path
@@ -109,38 +139,7 @@ export default function LoginPage() {
             </Button>
           </div>
 
-          {/* Divider */}
-          <div className="relative flex items-center justify-center my-6">
-            <div className="absolute inset-x-0 h-px bg-zinc-800" />
-            <span className="relative px-3 bg-zinc-950 text-xs font-mono text-zinc-500 uppercase tracking-wider">
-              or continue with
-            </span>
-          </div>
-
           {/* Email Login Form */}
-          <form onSubmit={handleEmailSubmit} className="space-y-4">
-            <div className="space-y-1.5">
-              <label htmlFor="email" className="text-xs font-semibold text-zinc-400 font-mono">
-                Email Address
-              </label>
-              <input
-                id="email"
-                type="email"
-                required
-                placeholder="name@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-11 px-4 rounded-xl bg-zinc-900 border border-zinc-850 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-zinc-100 text-sm outline-none transition-all placeholder:text-zinc-650"
-              />
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full h-11 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium transition-all shadow-lg shadow-indigo-600/10 cursor-pointer"
-            >
-              Sign In with Email
-            </Button>
-          </form>
         </div>
 
         {/* Bottom footer disclaimer */}
@@ -159,7 +158,6 @@ export default function LoginPage() {
 
       {/* RIGHT COLUMN: Immersive Visual Panel (Hidden on mobile) */}
       <div className="hidden lg:flex flex-col justify-between p-12 bg-zinc-900/30 border-l border-zinc-900 relative overflow-hidden">
-        
         {/* Subtle grid and mesh glows */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,oklch(1_0_0_/_3%)_1px,transparent_1px),linear-gradient(to_bottom,oklch(1_0_0_/_3%)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] pointer-events-none" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[350px] bg-indigo-500/10 blur-[130px] rounded-full pointer-events-none" />
@@ -174,24 +172,26 @@ export default function LoginPage() {
 
         {/* Visual Content: Mock Console and value prop */}
         <div className="z-10 max-w-lg mx-auto space-y-12">
-          
           {/* Main Visual: Active Agent Simulator */}
           <div className="rounded-2xl border border-zinc-800 bg-zinc-950/80 shadow-2xl p-6 relative overflow-hidden group">
-            
             {/* Spotlight overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 to-transparent pointer-events-none" />
-            
+
             {/* Header */}
             <div className="flex items-center justify-between border-b border-zinc-900 pb-4 mb-4">
               <div className="flex items-center gap-2">
                 <Cpu className="w-5 h-5 text-indigo-400" />
-                <span className="font-mono text-sm font-semibold text-zinc-300">relay-agent-prod-03</span>
+                <span className="font-mono text-sm font-semibold text-zinc-300">
+                  relay-agent-prod-03
+                </span>
               </div>
               <div className="flex items-center gap-1">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/30 animate-pulse flex items-center justify-center">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                 </span>
-                <span className="font-mono text-[11px] text-emerald-400 font-semibold">live_agent</span>
+                <span className="font-mono text-[11px] text-emerald-400 font-semibold">
+                  live_agent
+                </span>
               </div>
             </div>
 
@@ -203,23 +203,33 @@ export default function LoginPage() {
                   <div
                     key={index}
                     className={`flex items-start gap-2.5 transition-all duration-300 ${
-                      isActive ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2 pointer-events-none"
+                      isActive
+                        ? "opacity-100 translate-x-0"
+                        : "opacity-0 -translate-x-2 pointer-events-none"
                     }`}
                   >
                     {step.type === "error" ? (
-                      <span className="text-red-400 font-semibold shrink-0">[err]</span>
+                      <span className="text-red-400 font-semibold shrink-0">
+                        [err]
+                      </span>
                     ) : step.type === "success" ? (
-                      <span className="text-emerald-400 font-semibold shrink-0">[ok]</span>
+                      <span className="text-emerald-400 font-semibold shrink-0">
+                        [ok]
+                      </span>
                     ) : (
-                      <span className="text-indigo-400 font-semibold shrink-0">[run]</span>
+                      <span className="text-indigo-400 font-semibold shrink-0">
+                        [run]
+                      </span>
                     )}
-                    <span className={`text-zinc-300 ${step.type === "error" ? "text-rose-200" : ""}`}>
+                    <span
+                      className={`text-zinc-300 ${step.type === "error" ? "text-rose-200" : ""}`}
+                    >
                       {step.text}
                     </span>
                   </div>
                 );
               })}
-              
+
               {activeStep < 4 && (
                 <div className="flex items-center gap-1 opacity-70">
                   <span className="text-zinc-600">...</span>
@@ -227,7 +237,6 @@ export default function LoginPage() {
                 </div>
               )}
             </div>
-
           </div>
 
           {/* Value Prop Bulletpoints */}
@@ -236,11 +245,11 @@ export default function LoginPage() {
               <Sparkles className="w-3 h-3" />
               <span>Autopilot responder</span>
             </div>
-            
+
             <h2 className="text-2xl font-bold tracking-tight text-zinc-100">
               Mitigate production outages in seconds.
             </h2>
-            
+
             <ul className="space-y-3.5 text-sm text-zinc-400 text-left">
               <li className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -248,24 +257,27 @@ export default function LoginPage() {
               </li>
               <li className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Out-of-the-box integrations for Sentry, GitHub, Jira, and Slack</span>
+                <span>
+                  Out-of-the-box integrations for Sentry, GitHub, Jira, and
+                  Slack
+                </span>
               </li>
               <li className="flex items-center gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-indigo-400 shrink-0" />
-                <span>100% secure, sandboxed container runtime for error reproduction</span>
+                <span>
+                  100% secure, sandboxed container runtime for error
+                  reproduction
+                </span>
               </li>
             </ul>
           </div>
-
         </div>
 
         {/* Footer info */}
         <div className="z-10 text-right text-xs text-zinc-650 font-mono">
           Relay Cloud Inc. © 2026
         </div>
-
       </div>
-
     </div>
   );
 }

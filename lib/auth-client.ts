@@ -11,4 +11,4 @@ export const {
   signOut,
   getSession,
   getAccessToken,
-} = createAuthClient();
+} = authClient;
