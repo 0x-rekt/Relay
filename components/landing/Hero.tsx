@@ -10,13 +10,12 @@ import {
   Settings,
   FileText,
 } from "lucide-react";
-
+import { FaSlack } from "react-icons/fa";
 import {
   SiGithub,
   SiSentry,
   SiJira,
   SiPagerduty,
-  SiSlackware,
   SiVercel,
   SiLinear,
   SiDatadog,
@@ -85,16 +84,16 @@ export function HeroSection() {
       <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-indigo-500/10 blur-[130px] rounded-full pointer-events-none animate-float" />
       <div className="absolute top-36 left-1/3 w-[300px] h-[200px] bg-emerald-500/5 blur-[100px] rounded-full pointer-events-none" />
 
-      {/* Floating Integration Icons — spaced evenly across the full section */}
-      <SiGithub className="absolute top-[8%] left-[6%] w-7 h-7 text-zinc-600 animate-float-slow pointer-events-none" />
-      <SiSentry className="absolute top-[5%] right-[8%] w-7 h-7 text-[#362D59] dark:text-[#E2E1E6]/20 animate-float-slower pointer-events-none" />
-      <SiDiscord className="absolute top-[22%] left-[3%] w-6 h-6 text-[#5865F2]/40 animate-float pointer-events-none" />
-      <SiJira className="absolute top-[20%] right-[4%] w-6 h-6 text-[#0052CC]/40 animate-float-slow pointer-events-none" />
-      <SiVercel className="absolute top-[38%] left-[12%] w-6 h-6 text-zinc-500/40 animate-float-slower pointer-events-none" />
-      <SiSlackware className="absolute top-[40%] right-[10%] w-6 h-6 text-[#4A154B]/90 dark:text-[#ECB22E]/20 animate-float-fast pointer-events-none" />
-      <SiPagerduty className="absolute top-[55%] left-[5%] w-6 h-6 text-[#00D084]/50 animate-float-slow pointer-events-none" />
-      <SiLinear className="absolute top-[58%] right-[6%] w-6 h-6 text-[#5E6AD2]/60 animate-float pointer-events-none" />
-      <SiDatadog className="absolute top-[72%] left-[9%] w-6 h-6 text-[#632CA6]/20 animate-float-slower pointer-events-none" />
+      {/* Floating Integration Icons — hidden on small screens */}
+      <SiGithub className="hidden md:block absolute top-[8%] left-[6%] w-7 h-7 text-zinc-600 animate-float-slow pointer-events-none" />
+      <SiSentry className="hidden md:block absolute top-[5%] right-[8%] w-7 h-7 text-[#362D59] dark:text-[#E2E1E6]/20 animate-float-slower pointer-events-none" />
+      <SiDiscord className="hidden md:block absolute top-[22%] left-[3%] w-6 h-6 text-[#5865F2]/40 animate-float pointer-events-none" />
+      <SiJira className="hidden md:block absolute top-[20%] right-[4%] w-6 h-6 text-[#0052CC]/40 animate-float-slow pointer-events-none" />
+      <SiVercel className="hidden md:block absolute top-[38%] left-[12%] w-6 h-6 text-zinc-500/40 animate-float-slower pointer-events-none" />
+      <FaSlack className="hidden md:block absolute top-[40%] right-[10%] w-6 h-6 text-[#4A154B]/90 dark:text-[#ECB22E]/20 animate-float-fast pointer-events-none" />
+      <SiPagerduty className="hidden md:block absolute top-[55%] left-[5%] w-6 h-6 text-[#00D084]/50 animate-float-slow pointer-events-none" />
+      <SiLinear className="hidden md:block absolute top-[58%] right-[6%] w-6 h-6 text-[#5E6AD2]/60 animate-float pointer-events-none" />
+      <SiDatadog className="hidden md:block absolute top-[72%] left-[9%] w-6 h-6 text-[#632CA6]/20 animate-float-slower pointer-events-none" />
 
       {/* Floating Notification/Tag */}
       <div className="z-10 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/80 border border-zinc-800/80 text-xs md:text-sm font-medium text-zinc-300 mb-8 backdrop-blur-sm shadow-md hover:border-zinc-700 transition-colors">

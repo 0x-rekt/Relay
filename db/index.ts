@@ -1,9 +1,9 @@
 import { drizzle } from "drizzle-orm/neon-http";
 
-import { authRelations } from "./schema";
+import { relations } from "./schema";
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL environment variable is not set");
 }
 
-export const db = drizzle(process.env.DATABASE_URL, { relations: authRelations });
+export const db = drizzle(process.env.DATABASE_URL, { relations: relations });

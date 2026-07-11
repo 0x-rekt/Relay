@@ -1,5 +1,20 @@
 import { defineRelations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  index,
+  uniqueIndex,
+  bigint,
+  pgEnum,
+} from "drizzle-orm/pg-core";
+
+export const workspaceRole = pgEnum("workspace_role", [
+  "owner",
+  "admin",
+  "member",
+]);
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -73,12 +88,70 @@ export const verification = pgTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
-export const authRelations = defineRelations(
-  { user, session, account },
+export const workspace = pgTable(
+  "workspace",
+  {
+    id: text("id").primaryKey(),
+    name: text("name").notNull(),
+    ownerId: text("owner_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    ai_tokens_used: bigint("ai_tokens_used", { mode: "number" })
+      .default(0)
+      .notNull(),
+    nl_gens_used: bigint("nl_gens_used", { mode: "number" })
+      .default(0)
+      .notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("workspace_ownerId_idx").on(table.ownerId),
+    uniqueIndex("workspace_ownerId_name_idx").on(table.ownerId, table.name),
+  ],
+);
+
+export const workspaceMember = pgTable(
+  "workspace_member",
+  {
+    id: text("id").primaryKey(),
+    workspaceId: text("workspace_id")
+      .notNull()
+      .references(() => workspace.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    role: workspaceRole("role").notNull().default("member"),
+    joinedAt: timestamp("joined_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("workspace_member_userId_idx").on(table.userId),
+    index("workspace_member_workspaceId_idx").on(table.workspaceId),
+    uniqueIndex("workspace_member_workspaceId_userId_idx").on(
+      table.workspaceId,
+      table.userId,
+    ),
+  ],
+);
+
+export const relations = defineRelations(
+  { user, session, account, workspace, workspaceMember },
   (r) => ({
     user: {
       sessions: r.many.session(),
       accounts: r.many.account(),
+      ownedWorkspaces: r.many.workspace({
+        from: r.user.id,
+        to: r.workspace.ownerId,
+      }),
+      workspaceMemberships: r.many.workspaceMember(),
     },
     session: {
       user: r.one.user({
@@ -92,5 +165,22 @@ export const authRelations = defineRelations(
         to: r.user.id,
       }),
     },
-  })
+    workspace: {
+      owner: r.one.user({
+        from: r.workspace.ownerId,
+        to: r.user.id,
+      }),
+      members: r.many.workspaceMember(),
+    },
+    workspaceMember: {
+      workspace: r.one.workspace({
+        from: r.workspaceMember.workspaceId,
+        to: r.workspace.id,
+      }),
+      user: r.one.user({
+        from: r.workspaceMember.userId,
+        to: r.user.id,
+      }),
+    },
+  }),
 );

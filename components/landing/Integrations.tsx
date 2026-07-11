@@ -3,23 +3,66 @@ import {
   SiSentry,
   SiJira,
   SiPagerduty,
-  SiSlackware,
   SiVercel,
   SiLinear,
   SiDatadog,
   SiDiscord,
 } from "@icons-pack/react-simple-icons";
+import { FaSlack } from "react-icons/fa";
 
 const tools = [
-  { name: "GitHub", icon: SiGithub, color: "hover:text-white hover:border-zinc-700 hover:bg-zinc-900/60" },
-  { name: "Sentry", icon: SiSentry, color: "hover:text-[#362D59] dark:hover:text-[#E2E1E6] hover:border-[#362D59]/40 hover:bg-[#362D59]/10" },
-  { name: "Slack", icon: SiSlackware, color: "hover:text-[#4A154B] dark:hover:text-[#ECB22E] hover:border-[#4A154B]/40 hover:bg-[#4A154B]/10" },
-  { name: "Jira", icon: SiJira, color: "hover:text-[#0052CC] hover:border-[#0052CC]/40 hover:bg-[#0052CC]/10" },
-  { name: "PagerDuty", icon: SiPagerduty, color: "hover:text-[#00D084] hover:border-[#00D084]/40 hover:bg-[#00D084]/10" },
-  { name: "Vercel", icon: SiVercel, color: "hover:text-white hover:border-zinc-700 hover:bg-zinc-900/60" },
-  { name: "Linear", icon: SiLinear, color: "hover:text-[#5E6AD2] hover:border-[#5E6AD2]/40 hover:bg-[#5E6AD2]/10" },
-  { name: "Datadog", icon: SiDatadog, color: "hover:text-[#632CA6] hover:border-[#632CA6]/40 hover:bg-[#632CA6]/10" },
-  { name: "Discord", icon: SiDiscord, color: "hover:text-[#5865F2] hover:border-[#5865F2]/40 hover:bg-[#5865F2]/10" },
+  {
+    name: "GitHub",
+    icon: SiGithub,
+    color: "hover:text-white hover:border-zinc-700 hover:bg-zinc-900/60",
+  },
+  {
+    name: "Sentry",
+    icon: SiSentry,
+    color:
+      "hover:text-[#362D59] dark:hover:text-[#E2E1E6] hover:border-[#362D59]/40 hover:bg-[#362D59]/10",
+  },
+  {
+    name: "Slack",
+    icon: FaSlack,
+    color:
+      "hover:text-[#4A154B] dark:hover:text-[#ECB22E] hover:border-[#4A154B]/40 hover:bg-[#4A154B]/10",
+  },
+  {
+    name: "Jira",
+    icon: SiJira,
+    color:
+      "hover:text-[#0052CC] hover:border-[#0052CC]/40 hover:bg-[#0052CC]/10",
+  },
+  {
+    name: "PagerDuty",
+    icon: SiPagerduty,
+    color:
+      "hover:text-[#00D084] hover:border-[#00D084]/40 hover:bg-[#00D084]/10",
+  },
+  {
+    name: "Vercel",
+    icon: SiVercel,
+    color: "hover:text-white hover:border-zinc-700 hover:bg-zinc-900/60",
+  },
+  {
+    name: "Linear",
+    icon: SiLinear,
+    color:
+      "hover:text-[#5E6AD2] hover:border-[#5E6AD2]/40 hover:bg-[#5E6AD2]/10",
+  },
+  {
+    name: "Datadog",
+    icon: SiDatadog,
+    color:
+      "hover:text-[#632CA6] hover:border-[#632CA6]/40 hover:bg-[#632CA6]/10",
+  },
+  {
+    name: "Discord",
+    icon: SiDiscord,
+    color:
+      "hover:text-[#5865F2] hover:border-[#5865F2]/40 hover:bg-[#5865F2]/10",
+  },
 ];
 
 export function IntegrationsSection() {
@@ -27,8 +70,10 @@ export function IntegrationsSection() {
   const marqueeTools = [...tools, ...tools, ...tools];
 
   return (
-    <section id="integrations" className="w-full py-16 border-y border-zinc-900 bg-zinc-950/40 relative overflow-hidden">
-      
+    <section
+      id="integrations"
+      className="w-full py-16 border-y border-zinc-900 bg-zinc-950/40 relative overflow-hidden"
+    >
       {/* Decorative background lines */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,oklch(1_0_0_/_2%)_1px,transparent_1px)] bg-[size:6rem_6rem] pointer-events-none" />
 
@@ -50,7 +95,9 @@ export function IntegrationsSection() {
               className={`flex items-center gap-2.5 px-5 py-3 rounded-xl border border-zinc-800/80 bg-zinc-900/30 text-zinc-400 backdrop-blur-sm transition-all duration-300 ${tool.color} cursor-pointer group`}
             >
               <tool.icon className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
-              <span className="font-semibold text-sm tracking-tight">{tool.name}</span>
+              <span className="font-semibold text-sm tracking-tight">
+                {tool.name}
+              </span>
             </div>
           ))}
         </div>
