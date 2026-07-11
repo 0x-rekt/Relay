@@ -91,7 +91,9 @@ export const verification = pgTable(
 export const workspace = pgTable(
   "workspace",
   {
-    id: text("id").primaryKey(),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
     name: text("name").notNull(),
     ownerId: text("owner_id")
       .notNull()
@@ -117,7 +119,9 @@ export const workspace = pgTable(
 export const workspaceMember = pgTable(
   "workspace_member",
   {
-    id: text("id").primaryKey(),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
     workspaceId: text("workspace_id")
       .notNull()
       .references(() => workspace.id, { onDelete: "cascade" }),
