@@ -89,3 +89,53 @@ export const getWorkSpaces = async () => {
     return { error: "Failed to get workspaces" };
   }
 };
+
+export const getWorkspaceById = async (workspaceId: string) => {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session?.user) {
+      return { error: "Unauthorized" };
+    }
+
+    const userExists = await db.query.user.findFirst({
+      where: {
+        id: session.user.id,
+      },
+    });
+
+    if (!userExists) {
+      return { error: "User not found" };
+    }
+
+    const workspace = await db.query.workspace.findFirst({
+      where: {
+        id: workspaceId,
+      },
+      columns: {
+        ai_tokens_used: true,
+        nl_gens_used: true,
+      },
+      with: {
+        members: {
+          columns: {},
+          with: {
+            user: {
+              columns: { image: true, name: true, email: true },
+            },
+          },
+        },
+        owner: {
+          columns: { image: true, name: true, email: true },
+        },
+      },
+    });
+
+    return { workspace };
+  } catch (error) {
+    console.error(error);
+    return { error: "Failed to get workspace" };
+  }
+};
