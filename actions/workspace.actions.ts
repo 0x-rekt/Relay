@@ -75,7 +75,9 @@ export const getWorkSpaces = async () => {
       where: {
         userId: session.user.id,
       },
-      columns: {},
+      columns: {
+        role: true,
+      },
       with: {
         workspace: {
           columns: { name: true, id: true },
@@ -115,6 +117,8 @@ export const getWorkspaceById = async (workspaceId: string) => {
         id: workspaceId,
       },
       columns: {
+        id: true,
+        name: true,
         ai_tokens_used: true,
         nl_gens_used: true,
       },

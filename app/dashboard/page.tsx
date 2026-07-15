@@ -111,25 +111,12 @@ export default async function DashboardPage() {
                       </CardDescription>
                     </CardHeader>
 
-                    <CardContent className="pb-6">
-                      <div className="space-y-2 text-xs text-zinc-400">
-                        <div className="flex items-center justify-between font-sans">
-                          <span>Active agents</span>
-                          <span className="font-mono text-zinc-500">0</span>
-                        </div>
-                        <div className="flex items-center justify-between font-sans">
-                          <span>Resolved issues</span>
-                          <span className="font-mono text-zinc-500">0</span>
-                        </div>
-                      </div>
-                    </CardContent>
-
                     <CardFooter className="border-t border-zinc-900/60 pt-4 flex justify-between items-center bg-zinc-900/10">
                       <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-mono text-zinc-400">
-                        <span>role: owner</span>
+                        <span>role: {item.role}</span>
                       </div>
                       <Link
-                        href={`/workspace/${ws.id}`}
+                        href={`/dashboard/${ws.id}`}
                         className="inline-flex items-center gap-1 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer group/link"
                       >
                         <span>Enter</span>
