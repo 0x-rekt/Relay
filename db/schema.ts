@@ -8,6 +8,7 @@ import {
   uniqueIndex,
   bigint,
   pgEnum,
+  jsonb,
 } from "drizzle-orm/pg-core";
 
 export const workspaceRole = pgEnum("workspace_role", [
@@ -145,8 +146,38 @@ export const workspaceMember = pgTable(
   ],
 );
 
+export const workflows = pgTable(
+  "workflows",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    name: text("name").notNull(),
+    workspaceId: text("workspace_id")
+      .notNull()
+      .references(() => workspace.id, { onDelete: "cascade" }),
+    createdBy: text("created_by").references(() => user.id, {
+      onDelete: "set null",
+    }),
+    graph: jsonb("graph").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("workflows_workspaceId_idx").on(table.workspaceId),
+    index("workflows_createdBy_idx").on(table.createdBy),
+    uniqueIndex("workflows_workspaceId_name_idx").on(
+      table.workspaceId,
+      table.name,
+    ),
+  ],
+);
+
 export const relations = defineRelations(
-  { user, session, account, workspace, workspaceMember },
+  { user, session, account, workspace, workspaceMember, workflows },
   (r) => ({
     user: {
       sessions: r.many.session(),
@@ -156,6 +187,10 @@ export const relations = defineRelations(
         to: r.workspace.ownerId,
       }),
       workspaceMemberships: r.many.workspaceMember(),
+      workflows: r.many.workflows({
+        from: r.user.id,
+        to: r.workflows.createdBy,
+      }),
     },
     session: {
       user: r.one.user({
@@ -175,6 +210,7 @@ export const relations = defineRelations(
         to: r.user.id,
       }),
       members: r.many.workspaceMember(),
+      workflows: r.many.workflows(),
     },
     workspaceMember: {
       workspace: r.one.workspace({
@@ -183,6 +219,16 @@ export const relations = defineRelations(
       }),
       user: r.one.user({
         from: r.workspaceMember.userId,
+        to: r.user.id,
+      }),
+    },
+    workflows: {
+      workspace: r.one.workspace({
+        from: r.workflows.workspaceId,
+        to: r.workspace.id,
+      }),
+      creator: r.one.user({
+        from: r.workflows.createdBy,
         to: r.user.id,
       }),
     },
