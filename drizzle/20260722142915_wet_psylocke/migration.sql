@@ -1,0 +1,1 @@
+ALTER TABLE "workspace" ALTER COLUMN "webhook_token" DROP NOT NULL;
