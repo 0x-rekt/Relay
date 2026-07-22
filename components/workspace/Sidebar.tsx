@@ -9,7 +9,8 @@ import {
   ChevronLeft, 
   Cpu, 
   Sparkles,
-  Terminal
+  Terminal,
+  Plug
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -43,6 +44,12 @@ export function Sidebar({ workspace }: SidebarProps) {
       href: `/dashboard/${workspace.id}/executions`,
       icon: PlayCircle,
       active: pathname.startsWith(`/dashboard/${workspace.id}/executions`),
+    },
+    {
+      name: "Integrations",
+      href: `/dashboard/${workspace.id}/integrations`,
+      icon: Plug,
+      active: pathname.startsWith(`/dashboard/${workspace.id}/integrations`),
     },
   ];
 
