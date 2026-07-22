@@ -8,7 +8,7 @@ interface PageProps {
   params: Promise<{ workspaceId: string }>;
 }
 
-const WorkflowPage = async ({ params }: PageProps) => {
+const WorkflowsPage = async ({ params }: PageProps) => {
   const { workspaceId } = await params;
   const { workflows, error } = await getWorkflows(workspaceId);
 
@@ -23,12 +23,14 @@ const WorkflowPage = async ({ params }: PageProps) => {
             </h1>
             {workflows && workflows.length > 0 && (
               <span className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                {workflows.length} {workflows.length === 1 ? "workflow" : "workflows"}
+                {workflows.length}{" "}
+                {workflows.length === 1 ? "workflow" : "workflows"}
               </span>
             )}
           </div>
           <p className="text-zinc-400 text-sm mt-1">
-            Create, manage, and monitor your automated pipelines and agent triggers.
+            Create, manage, and monitor your automated pipelines and agent
+            triggers.
           </p>
         </div>
 
@@ -48,7 +50,7 @@ const WorkflowPage = async ({ params }: PageProps) => {
         <div className="relative overflow-hidden rounded-3xl border border-zinc-800/80 bg-gradient-to-b from-zinc-900/50 via-zinc-950/80 to-zinc-950 p-10 md:p-16 text-center flex flex-col items-center justify-center min-h-[400px]">
           {/* Ambient Glow background */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none" />
-          
+
           <div className="relative z-10 flex flex-col items-center max-w-md space-y-6">
             {/* Icon Container */}
             <div className="relative flex items-center justify-center">
@@ -64,13 +66,14 @@ const WorkflowPage = async ({ params }: PageProps) => {
                 No Workflows Found
               </h2>
               <p className="text-sm text-zinc-400 leading-relaxed">
-                You haven&apos;t created any workflows in this workspace yet. Get started by building your first integration pipeline.
+                You haven&apos;t created any workflows in this workspace yet.
+                Get started by building your first integration pipeline.
               </p>
             </div>
 
             {/* Action button */}
-            <CreateWorkflowModal 
-              workspaceId={workspaceId} 
+            <CreateWorkflowModal
+              workspaceId={workspaceId}
               trigger={
                 <Button className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-6 py-2.5 font-medium transition-all cursor-pointer flex items-center gap-2 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98]">
                   <Plus className="w-4 h-4" />
@@ -110,4 +113,4 @@ const WorkflowPage = async ({ params }: PageProps) => {
   );
 };
 
-export default WorkflowPage;
+export default WorkflowsPage;
