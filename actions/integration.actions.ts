@@ -77,7 +77,6 @@ export const disconnectIntegration = async (
       .where(
         and(
           eq(integrations.workspaceId, workspaceId),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           eq(integrations.provider, provider as any),
         ),
       );
