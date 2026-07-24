@@ -90,8 +90,6 @@ const PROVIDERS = [
 
 type Provider = (typeof PROVIDERS)[number];
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 interface ConnectedIntegration {
   id: string;
   provider: string;
@@ -108,8 +106,6 @@ interface IntegrationsClientProps {
   connectedIntegrations: ConnectedIntegration[];
   error?: string;
 }
-
-// ─── Status badge ─────────────────────────────────────────────────────────────
 
 function StatusBadge({ status }: { status: string }) {
   if (status === "connected") {
@@ -135,8 +131,6 @@ function StatusBadge({ status }: { status: string }) {
     </span>
   );
 }
-
-// ─── Provider Card ────────────────────────────────────────────────────────────
 
 function ProviderCard({
   provider,

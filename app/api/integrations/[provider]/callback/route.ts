@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
-import { integrations, workspaceMember } from "@/db/schema";
+import { integrations } from "@/db/schema";
 import { encrypt } from "@/lib/crypto";
 import { eq } from "drizzle-orm";
 
@@ -72,7 +72,6 @@ export async function GET(
     `${request.nextUrl.protocol}//${request.nextUrl.host}`;
   const redirectUri = `${baseUrl}/api/integrations/${providerKey}/callback`;
 
-  // 1. OAuth Initiation Flow (if no code parameter is present in URL)
   if (!code && !oauthError) {
     const workspaceId = searchParams.get("workspaceId");
     if (!workspaceId) {
